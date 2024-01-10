@@ -1,5 +1,3 @@
-
-
 document.addEventListener("DOMContentLoaded", function () {
     getUsers();
   });
@@ -17,7 +15,8 @@ document.addEventListener("DOMContentLoaded", function () {
           e.preventDefault();
   
           // taking the input and turning it to lowercase
-          const search = document.querySelector("#search").value.toLowerCase();
+          const searchInput = document.querySelector("#search");
+          const search = searchInput.value.toLowerCase();
   
           // Array to store matching users once found
           let matchingUsers = [];
@@ -29,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
   
             if (fullName.includes(search)) {
               userExistence = true;
-              // Store matching users in the array
+              // Storing matching users in the array
               matchingUsers.push(item);
             }
           }
@@ -37,10 +36,10 @@ document.addEventListener("DOMContentLoaded", function () {
           if (!userExistence) {
             alert(`User ${search} not found`);
           } else {
-            // Clear user list to create a fresh one
+            // Creating user list
             userList.innerHTML = "";
   
-            // Display loop for matching users
+            // Displaying loop for matching users
             for (const item of matchingUsers) {
               const fullName = item.full_name;
               const avatarUrl = item.owner.avatar_url;
@@ -60,19 +59,19 @@ document.addEventListener("DOMContentLoaded", function () {
               profileLink.href = profileUrl;
               profileLink.textContent = "View Profile";
   
-              // Add click event listener to each user container
+              // Adding click event listener to each user container
               userContainer.addEventListener("click", async () => {
                 // Extract the username from the full name
                 const username = fullName.split("/")[0].trim();
-                // Construct the URL for the User Repos Endpoint
-                const userReposUrl = `https://api.github.com/users/${username}/repos`;
+                // URL for the User Repos Endpoint
+                const userReposUrl =`https://api.github.com/users/${username}/repos`;
   
                 try {
-                  // Fetch the user's repositories
+                  // Fetching the user's repositories
                   const reposResponse = await fetch(userReposUrl);
                   const repos = await reposResponse.json();
   
-                  // Display the repository data for the selected user
+                  // Displaying the repository data for the selected user
                   const reposContainer = document.createElement("div");
                   reposContainer.classList.add("repos-container");
   
@@ -98,7 +97,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     reposContainer.appendChild(repoContainer);
                   });
   
-                  // Append the repositories to the user container
+                  // Appending the repositories to the user container
                   userContainer.appendChild(reposContainer);
                 } catch (error) {
                   console.error("Error fetching repositories:", error);
@@ -113,6 +112,9 @@ document.addEventListener("DOMContentLoaded", function () {
               // Appending the container to the userlist
               userList.appendChild(userContainer);
             }
+  
+            // Clear the input field after successful submission
+            searchInput.value = "";
           }
         });
       });
